@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Mac Admins Slack
+    url: https://macadmins.slack.com/archives/C03G27DCDC4
+    about: Prefer not to use GitHub? Mention your event in the #macadminsfoundation channel and we'll take it from there.
+  - name: Community Calendar
+    url: https://macadmins.org/calendar/
+    about: Browse the events currently on the calendar.

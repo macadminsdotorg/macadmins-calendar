@@ -1,0 +1,85 @@
+name: Community Event Submission
+description: Suggest a conference, meetup, or community event for the Mac Admins calendar.
+title: "[Event] "
+labels: ["event-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an event for the [Community Calendar](https://macadmins.org/calendar/)!
+
+        A Mac Admins Foundation volunteer will review it. Good fits are **broadly relevant to the Mac admin community, offer high-quality technical or professional content, are live (in person or virtual), and welcome all attendees.** Sales pitches, invite-only events, and pre-recorded events aren't a fit.
+  - type: input
+    id: name
+    attributes:
+      label: Event name
+      placeholder: e.g. MacSysAdmin
+    validations:
+      required: true
+  - type: input
+    id: full_name
+    attributes:
+      label: Full name (optional)
+      description: A longer, more descriptive name if the short name isn't obvious.
+      placeholder: e.g. Mac & iOS System Administrators Conference
+  - type: input
+    id: website
+    attributes:
+      label: Event website
+      placeholder: https://
+    validations:
+      required: true
+  - type: input
+    id: start_date
+    attributes:
+      label: Start date
+      description: Format YYYY-MM-DD.
+      placeholder: "2026-09-29"
+    validations:
+      required: true
+  - type: input
+    id: end_date
+    attributes:
+      label: End date
+      description: Format YYYY-MM-DD. Use the same date as the start for a one-day event.
+      placeholder: "2026-10-02"
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: City, State/Province, Country — or "Online" for a virtual event.
+      placeholder: "Göteborg, Sweden"
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Event type
+      options:
+        - Conference
+        - Meetup
+        - User group
+        - Workshop
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: videos
+    attributes:
+      label: Session videos (optional)
+      description: Link to a channel or playlist if talks are published.
+      placeholder: https://
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else? (optional)
+      description: Extra context, or how you're connected to the event.
+  - type: checkboxes
+    id: eligibility
+    attributes:
+      label: Eligibility
+      options:
+        - label: This event is relevant to the Mac admin community and welcomes all attendees — it isn't a sales pitch, invite-only, or pre-recorded.
+          required: true

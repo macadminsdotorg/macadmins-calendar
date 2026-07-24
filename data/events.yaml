@@ -169,6 +169,13 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/user/psumacconf/videos"
 
+  - name: "Toronto Mac Admins Meetup"
+    start_date: "2026-07-29"
+    end_date: "2026-07-29"
+    location: "Toronto, ON, Canada"
+    website: "https://luma.com/p5hvhpx0"
+    type: "meetup"
+
   - name: "Mac Admins India Connect 2026"
     start_date: "2026-08-01"
     end_date: "2026-08-01"

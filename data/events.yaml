@@ -183,7 +183,7 @@ events:
     website: "https://conference.macadmins.in/"
     type: "conference"
 
-  - name: "London Apple Admins - 13th August 2026 - Meet Up @ Iru"
+  - name: "London Apple Admins hosted by Iru"
     start_date: "2026-08-13"
     end_date: "2026-08-13"
     location: "London, UK"

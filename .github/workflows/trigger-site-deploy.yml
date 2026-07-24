@@ -1,0 +1,20 @@
+name: Trigger site deploy
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "data/events.yaml"
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch calendar-updated to macadminsdotorg
+        env:
+          # Fine-grained PAT scoped to macadminsdotorg/macadminsdotorg with
+          # Contents: read/write (required for repository_dispatch).
+          GH_TOKEN: ${{ secrets.SITE_DEPLOY_TOKEN }}
+        run: |
+          gh api -X POST repos/macadminsdotorg/macadminsdotorg/dispatches \
+            -f event_type=calendar-updated

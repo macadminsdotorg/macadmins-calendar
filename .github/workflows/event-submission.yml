@@ -48,11 +48,12 @@ jobs:
 
             Closes #${{ github.event.issue.number }}
           delete-branch: true
-      - name: Comment on issue
+      - name: Close issue
         env:
           GH_TOKEN: ${{ github.token }}
           PR_URL: ${{ steps.pr.outputs.pull-request-url }}
         run: |
-          gh issue comment "${{ github.event.issue.number }}" \
+          gh issue close "${{ github.event.issue.number }}" \
             --repo "${{ github.repository }}" \
-            --body "Thanks! This submission has been approved and converted to a pull request: $PR_URL"
+            --reason completed \
+            --comment "Thanks! This submission has been approved and converted to a pull request: $PR_URL — the event will appear on the calendar once it merges."

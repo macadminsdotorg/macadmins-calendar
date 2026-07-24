@@ -92,7 +92,7 @@ Pull requests are automatically validated for required fields, date format, and 
 Form submissions arrive as issues labeled `event-submission`. To process one:
 
 1. Check the event against the eligibility criteria above. If it isn't a fit, close the issue with a short comment.
-2. If it's a fit, add the **`approved`** label. The [event-submission workflow](.github/workflows/event-submission.yml) then parses the form, inserts the event into `data/events.yaml` in date order, and opens a pull request that closes the issue on merge.
+2. If it's a fit, add the **`approved`** label. The [event-submission workflow](.github/workflows/event-submission.yml) then parses the form, inserts the event into `data/events.yaml` in date order, opens a pull request, and closes the issue with a link to it. (If the PR ends up rejected, reopen the issue.)
 3. Review the PR diff and merge it. The event appears on macadmins.org after the site's next build (daily, or trigger the site repo's deploy workflow manually).
 
 Things to know:

@@ -219,6 +219,14 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/@objectiveseefoundation"
 
+  - name: "Diego's Birthday"
+    full_name: "Stuff! Fun! CAKE AND ICE CREAM"
+    start_date: "2027-02-11"
+    end_date: "2027-02-11"
+    location: "Cheltenham, UK"
+    website: "iaconelli.org"
+    type: "meetup"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2027-10-26"

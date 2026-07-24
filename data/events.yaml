@@ -176,6 +176,14 @@ events:
     website: "https://conference.macadmins.in/"
     type: "conference"
 
+  - name: "London Apple Admins - 13th August 2026 - Meet Up @ Iru"
+    start_date: "2026-08-13"
+    end_date: "2026-08-13"
+    location: "London, UK"
+    website: "https://londonappleadmins.org.uk/2026/07/21/13th-august-2026-meet-up-iru/"
+    type: "meetup"
+    videos: "https://www.youtube.com/@londonappleadmins"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2026-09-22"

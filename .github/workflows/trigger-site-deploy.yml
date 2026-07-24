@@ -1,6 +1,7 @@
 name: Trigger site deploy
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
     paths:

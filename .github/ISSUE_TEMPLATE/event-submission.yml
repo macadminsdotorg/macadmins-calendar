@@ -62,6 +62,7 @@ body:
         - Meetup
         - User group
         - Workshop
+        - Webinar
         - Other
     validations:
       required: true

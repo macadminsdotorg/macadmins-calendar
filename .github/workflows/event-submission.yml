@@ -1,0 +1,58 @@
+name: Convert approved event submission to PR
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  create-pr:
+    # Fires when a volunteer adds the "approved" label to an event submission.
+    if: github.event.label.name == 'approved' && contains(github.event.issue.labels.*.name, 'event-submission')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install pyyaml
+      - name: Add event to events.yaml
+        id: convert
+        env:
+          # Untrusted input: only ever passed via environment, never
+          # interpolated into run steps.
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python scripts/issue_to_event.py
+      - name: Validate
+        id: validate
+        run: |
+          if python scripts/validate_events.py; then
+            echo "result=passed" >> "$GITHUB_OUTPUT"
+          else
+            echo "result=failed" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create pull request
+        id: pr
+        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        with:
+          branch: event-submission/issue-${{ github.event.issue.number }}
+          title: "Add event: ${{ steps.convert.outputs.name }}"
+          commit-message: "Add event: ${{ steps.convert.outputs.name }} (#${{ github.event.issue.number }})"
+          body: |
+            Adds **${{ steps.convert.outputs.name }}** to the calendar, submitted in #${{ github.event.issue.number }}.
+
+            ${{ steps.validate.outputs.result == 'passed' && ':white_check_mark: `validate_events.py` passed.' || ':warning: `validate_events.py` failed — check the entry (event type?) before merging.' }}
+
+            Closes #${{ github.event.issue.number }}
+          delete-branch: true
+      - name: Comment on issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ steps.pr.outputs.pull-request-url }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --repo "${{ github.repository }}" \
+            --body "Thanks! This submission has been approved and converted to a pull request: $PR_URL"

@@ -183,6 +183,14 @@ events:
     website: "https://conference.macadmins.in/"
     type: "conference"
 
+  - name: "Four Corners & The Silver State @ Black Hat"
+    full_name: "Four Corners & The Silver State Users Group Live in Last Vegas - Black Hat Edition!"
+    start_date: "2026-08-06"
+    end_date: "2026-08-06"
+    location: "6543 S Las Vegas Blvd"
+    website: "https://luma.com/tqdhy9uk"
+    type: "meetup"
+
   - name: "London Apple Admins hosted by Iru"
     start_date: "2026-08-13"
     end_date: "2026-08-13"

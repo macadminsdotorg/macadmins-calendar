@@ -191,6 +191,13 @@ events:
     type: "meetup"
     videos: "https://www.youtube.com/@londonappleadmins"
 
+  - name: "Summer Cookout"
+    start_date: "2026-08-27"
+    end_date: "2026-08-27"
+    location: "Carmel, IN"
+    website: "https://luma.com/b5ehjmgt"
+    type: "meetup"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2026-09-22"

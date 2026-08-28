@@ -241,6 +241,15 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/@objectiveseefoundation"
 
+  - name: "MacAdmins Conference"
+    full_name: "MacAdmins Conference"
+    start_date: "2027-07-13"
+    end_date: "2027-07-16"
+    location: "State College, PA, USA"
+    website: "macadmins.psu.edu"
+    type: "conference"
+    videos: "https://www.youtube.com/playlist?list=PLGUPbEf2-7aE"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2027-10-26"

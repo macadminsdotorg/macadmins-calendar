@@ -222,6 +222,13 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/user/JAMFMedia/featured"
 
+  - name: "Oktane 2026"
+    start_date: "2026-09-22"
+    end_date: "2026-09-24"
+    location: "Las Vegas, NV, USA"
+    website: "https://www.okta.com/oktane/"
+    type: "conference"
+
   - name: "MacSysAdmin"
     start_date: "2026-09-29"
     end_date: "2026-10-02"

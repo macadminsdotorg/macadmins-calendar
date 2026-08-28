@@ -249,6 +249,14 @@ events:
     website: "macadmins.psu.edu"
     type: "conference"
     videos: "https://www.youtube.com/playlist?list=PLGUPbEf2-7aE"
+    
+  - name: "MacAD.UK 2027"
+    start_date: "2027-03-10"
+    end_date: "2027-03-11"
+    location: "Brighton, England, The United Kingdom"
+    website: "https://www.macad.uk"
+    type: "conference"
+    videos: "https://www.youtube.com/playlist?list=PLmBOyWhgnnx8rv3KJeCkSmDzyi7Jw5IR_"
 
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"

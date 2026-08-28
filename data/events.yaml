@@ -232,6 +232,13 @@ events:
     archive: "http://documentation.macsysadmin.se/"
     videos: "https://www.youtube.com/@MacSysAdminConference"
 
+  - name: "Texas Apple Admins Round-Up"
+    start_date: "2026-10-15"
+    end_date: "2026-10-15"
+    location: "Online"
+    website: "https://luma.com/1e1eh23r"
+    type: "meetup"
+
   - name: "OBTS"
     full_name: "Objective by the Sea"
     start_date: "2026-11-15"

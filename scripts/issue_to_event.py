@@ -51,6 +51,21 @@ FIELD_ORDER = (
 
 DATE_RE = re.compile(r'start_date:\s*"?(\d{4}-\d{2}-\d{2})')
 
+URL_FIELDS = ("website", "videos")
+
+
+def normalize_url(value):
+    """Prefix a bare host such as 'macadmins.psu.edu' with 'https://'.
+
+    A scheme-relative '//host/path' keeps its path but gains 'https:'. Values
+    that already carry a scheme are returned untouched.
+    """
+    if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", value):
+        return value
+    if value.startswith("//"):
+        return f"https:{value}"
+    return f"https://{value.lstrip('/')}"
+
 
 def parse_issue_body(body):
     """Parse '### Label\n\nvalue' sections into a dict of stripped values."""
@@ -76,6 +91,9 @@ def build_event(sections):
         event[field] = " ".join(value.split())
     if event.get("type"):
         event["type"] = TYPE_MAP.get(event["type"], event["type"].lower())
+    for field in URL_FIELDS:
+        if event.get(field):
+            event[field] = normalize_url(event[field])
     return event
 
 

@@ -239,6 +239,14 @@ events:
     archive: "http://documentation.macsysadmin.se/"
     videos: "https://www.youtube.com/@MacSysAdminConference"
 
+  - name: "NYC JUG"
+    full_name: "NYC Jamf User Group"
+    start_date: "2026-10-08"
+    end_date: "2026-10-08"
+    location: "New York, NY, USA"
+    website: "https://forms.cloud.microsoft/r/sy6s969E6g?origin=lprLink"
+    type: "meetup"
+
   - name: "Texas Apple Admins Round-Up"
     start_date: "2026-10-15"
     end_date: "2026-10-15"

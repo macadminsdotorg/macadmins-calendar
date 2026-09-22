@@ -5,7 +5,10 @@ on:
   push:
     branches: ["main"]
     paths:
+      # The site fetches both of these at build time, so a change to either
+      # should reach it now rather than waiting for the next daily build.
       - "data/events.yaml"
+      - "data/languages.yaml"
 
 jobs:
   dispatch:

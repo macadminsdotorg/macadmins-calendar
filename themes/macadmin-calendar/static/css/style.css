@@ -401,6 +401,10 @@ main {
     color: var(--text-secondary);
 }
 
+.event-organizer {
+    color: var(--text-secondary);
+}
+
 .event-type-badge,
 .event-status-badge {
     display: inline-block;

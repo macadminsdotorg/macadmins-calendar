@@ -210,6 +210,7 @@ events:
     start_date: "2026-08-27"
     end_date: "2026-08-27"
     location: "Carmel, IN"
+    organizer: "Hoosier Mac Admins"
     website: "https://luma.com/b5ehjmgt"
     type: "meetup"
 

@@ -23,6 +23,7 @@ FIELD_MAP = {
     "Start date": "start_date",
     "End date": "end_date",
     "Location": "location",
+    "Organizing group (optional)": "organizer",
     "Event type": "type",
     "Session videos (optional)": "videos",
 }
@@ -44,6 +45,7 @@ FIELD_ORDER = (
     "start_date",
     "end_date",
     "location",
+    "organizer",
     "website",
     "type",
     "videos",

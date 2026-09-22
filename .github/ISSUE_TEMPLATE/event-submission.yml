@@ -53,6 +53,12 @@ body:
       placeholder: "Göteborg, Sweden"
     validations:
       required: true
+  - type: input
+    id: organizer
+    attributes:
+      label: Organizing group (optional)
+      description: The user group, company, or organization that runs the event. Leave blank if it's the same as the event name.
+      placeholder: e.g. Hoosier Mac Admins
   - type: dropdown
     id: type
     attributes:

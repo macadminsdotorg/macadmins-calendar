@@ -7,7 +7,7 @@
 {{ $isUpcoming := ge (time $eventEndDateTime) now }}
 {{ $status := cond $isUpcoming "upcoming" "past" }}
 {{ $statusLabel := cond $isUpcoming "Upcoming" "Past" }}
-{{ $filterText := lower (printf "%s %s %s" .name (.full_name | default "") .location) }}
+{{ $filterText := lower (printf "%s %s %s %s" .name (.full_name | default "") .location (.organizer | default "")) }}
 <div class="event-item {{ $status }}" data-status="{{ $status }}" data-filter-text="{{ $filterText }}">
     <div class="event-main">
         <h3>
@@ -21,6 +21,7 @@
                 <span aria-hidden="true">📅</span> {{ dateFormat "January 2" .start_date }}{{ if ne .start_date .end_date }} - {{ dateFormat "January 2, 2006" .end_date }}{{ else }}, {{ dateFormat "2006" .start_date }}{{ end }}
             </span>
             <span class="event-location"><span aria-hidden="true">📍</span> {{ .location }}</span>
+            {{ with .organizer }}{{ if and (ne . $.name) (ne . ($.full_name | default "")) }}<span class="event-organizer"><span aria-hidden="true">👥</span> {{ . }}</span>{{ end }}{{ end }}
             <span class="event-status-badge {{ $status }}">{{ $statusLabel }}</span>
             <span class="event-type-badge"><span aria-hidden="true">🏷️</span> {{ title .type }}</span>
         </div>

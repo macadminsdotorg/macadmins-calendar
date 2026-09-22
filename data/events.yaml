@@ -243,7 +243,6 @@ events:
     organizer: "Greater Philadelphia Mac Admins"
     website: "https://www.eventbrite.com/e/september-meetup-at-yards-tickets-2002064845848"
     type: "meetup"
-    language: "none"
 
   - name: "NYC JUG"
     full_name: "NYC Jamf User Group"

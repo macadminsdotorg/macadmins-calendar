@@ -236,6 +236,15 @@ events:
     archive: "http://documentation.macsysadmin.se/"
     videos: "https://www.youtube.com/@MacSysAdminConference"
 
+  - name: "September Meetup at Yards!"
+    start_date: "2026-09-29"
+    end_date: "2026-09-29"
+    location: "Philadelphia, PA, USA"
+    organizer: "Greater Philadelphia Mac Admins"
+    website: "https://www.eventbrite.com/e/september-meetup-at-yards-tickets-2002064845848"
+    type: "meetup"
+    language: "none"
+
   - name: "NYC JUG"
     full_name: "NYC Jamf User Group"
     start_date: "2026-10-08"

@@ -82,6 +82,13 @@ FIELD_ORDER = (
     "language",
 )
 
+# An unanswered optional field renders differently depending on its type:
+# a text input gives "_No response_", a dropdown gives "None". Only the
+# dropdown-backed fields get the second reading, so a text field whose answer
+# is legitimately the word "None" is left alone.
+DROPDOWN_FIELDS = ("type", "language")
+UNANSWERED = "_No response_"
+
 DATE_RE = re.compile(r'start_date:\s*"?(\d{4}-\d{2}-\d{2})')
 
 URL_FIELDS = ("website", "videos", "archive")
@@ -118,7 +125,9 @@ def build_event(sections):
     event = {}
     for label, field in FIELD_MAP.items():
         value = sections.get(label, "")
-        if not value or value == "_No response_":
+        if not value or value == UNANSWERED:
+            continue
+        if field in DROPDOWN_FIELDS and value == "None":
             continue
         # Single-line fields only; collapse any stray newlines.
         event[field] = " ".join(value.split())

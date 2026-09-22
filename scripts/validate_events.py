@@ -10,9 +10,11 @@ import yaml
 
 REQUIRED = ("name", "start_date", "end_date", "location", "website", "type")
 ALLOWED_TYPES = {"conference", "meetup", "workshop", "webinar"}
-URL_FIELDS = ("website", "videos")
+URL_FIELDS = ("website", "videos", "archive")
 URL_RE = re.compile(r"^https?://\S+$")
-EVENTS_PATH = Path(__file__).resolve().parent.parent / "data" / "events.yaml"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+EVENTS_PATH = DATA_DIR / "events.yaml"
+LANGUAGES_PATH = DATA_DIR / "languages.yaml"
 
 
 def parse_date(value, field, label):
@@ -31,7 +33,17 @@ def parse_date(value, field, label):
         )
 
 
-def validate(events):
+def load_languages():
+    """ISO codes from data/languages.yaml, so the form dropdown, the parser's
+    LANGUAGE_MAP and the data can't drift apart unnoticed."""
+    try:
+        with open(LANGUAGES_PATH) as f:
+            return set((yaml.safe_load(f) or {}).get("languages", {}))
+    except FileNotFoundError:
+        return set()
+
+
+def validate(events, languages=frozenset()):
     if not isinstance(events, list):
         return [f"top-level 'events' must be a list, got {type(events).__name__}"]
 
@@ -60,6 +72,18 @@ def validate(events):
                 f"{label}: type {event['type']!r} not in {sorted(ALLOWED_TYPES)}"
             )
 
+        language = event.get("language")
+        if language == "en":
+            errors.append(
+                f"{label}: language \"en\" is redundant — the field marks the "
+                f"exception, so omit it for English-language events"
+            )
+        elif language and languages and language not in languages:
+            errors.append(
+                f"{label}: language {language!r} is not in languages.yaml; add it "
+                f"there (and to LANGUAGE_MAP and the issue form) or fix the code"
+            )
+
         if event.get("start_date") and event.get("end_date"):
             try:
                 start = parse_date(event["start_date"], "start_date", label)
@@ -79,7 +103,7 @@ def main():
     if not isinstance(data, dict) or "events" not in data:
         print(f"{EVENTS_PATH}: top-level 'events' key missing", file=sys.stderr)
         return 1
-    errors = validate(data["events"])
+    errors = validate(data["events"], load_languages())
     if errors:
         for err in errors:
             print(err, file=sys.stderr)

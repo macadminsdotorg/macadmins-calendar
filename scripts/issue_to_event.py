@@ -26,6 +26,8 @@ FIELD_MAP = {
     "Organizing group (optional)": "organizer",
     "Event type": "type",
     "Session videos (optional)": "videos",
+    "Documentation archive (optional)": "archive",
+    "Event language (optional)": "language",
 }
 
 # Issue form dropdown option -> events.yaml type. Unmapped options fall
@@ -39,6 +41,33 @@ TYPE_MAP = {
     "Webinar": "webinar",
 }
 
+# Issue form dropdown option -> ISO 639-1 code, mirroring TYPE_MAP. Kept in
+# step with data/languages.yaml; validate_events.py rejects a code that file
+# does not carry, so the two cannot drift silently. English is deliberately
+# absent: the field marks the exception, and an event with no language is
+# English.
+LANGUAGE_MAP = {
+    "Arabic": "ar",
+    "Chinese": "zh",
+    "Czech": "cs",
+    "Danish": "da",
+    "Dutch": "nl",
+    "Finnish": "fi",
+    "French": "fr",
+    "German": "de",
+    "Hindi": "hi",
+    "Hungarian": "hu",
+    "Italian": "it",
+    "Japanese": "ja",
+    "Korean": "ko",
+    "Norwegian": "no",
+    "Polish": "pl",
+    "Portuguese": "pt",
+    "Russian": "ru",
+    "Spanish": "es",
+    "Swedish": "sv",
+}
+
 FIELD_ORDER = (
     "name",
     "full_name",
@@ -49,11 +78,13 @@ FIELD_ORDER = (
     "website",
     "type",
     "videos",
+    "archive",
+    "language",
 )
 
 DATE_RE = re.compile(r'start_date:\s*"?(\d{4}-\d{2}-\d{2})')
 
-URL_FIELDS = ("website", "videos")
+URL_FIELDS = ("website", "videos", "archive")
 
 
 def normalize_url(value):
@@ -93,6 +124,10 @@ def build_event(sections):
         event[field] = " ".join(value.split())
     if event.get("type"):
         event["type"] = TYPE_MAP.get(event["type"], event["type"].lower())
+    # An unmapped language falls through as-is so validation flags it on the
+    # PR rather than a wrong value being merged silently, same as type.
+    if event.get("language"):
+        event["language"] = LANGUAGE_MAP.get(event["language"], event["language"].lower())
     for field in URL_FIELDS:
         if event.get(field):
             event[field] = normalize_url(event[field])

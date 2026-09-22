@@ -1,18 +1,16 @@
 name: Validate events.yaml
 
+# No path filter. The job takes about six seconds, and every filtered list is
+# a gap waiting to open: validate_events.py grew a dependency on
+# data/languages.yaml and the issue form's LANGUAGE_MAP lives in
+# scripts/issue_to_event.py, neither of which the old filter watched — so a
+# pull request adding a language skipped the very check meant to catch a bad
+# one. Running it on everything costs nothing and cannot drift.
 on:
   pull_request:
     branches: ["main"]
-    paths:
-      - "data/events.yaml"
-      - "scripts/validate_events.py"
-      - ".github/workflows/validate.yml"
   push:
     branches: ["main"]
-    paths:
-      - "data/events.yaml"
-      - "scripts/validate_events.py"
-      - ".github/workflows/validate.yml"
 
 jobs:
   validate:

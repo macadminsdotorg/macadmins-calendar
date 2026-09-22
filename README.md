@@ -60,6 +60,7 @@ Events that will not be a good fit include:
       start_date: "2025-07-15"
       end_date: "2025-07-18"
       location: "City, State/Province, Country"
+      organizer: "Organizing User Group"     # optional
       website: "https://example.com"
       type: "conference"
       videos: "https://youtube.com/channel"  # optional
@@ -77,6 +78,7 @@ Pull requests are automatically validated for required fields, date format, and 
 - **start_date**: Start date in YYYY-MM-DD format (required)
 - **end_date**: End date in YYYY-MM-DD format, same as start_date for single-day events (required)
 - **location**: City, State/Province, Country (required)
+- **organizer**: User group, company, or organization that runs the event (optional). Omit when it would just restate the event name.
 - **website**: Official website URL (required)
 - **type**: Event type (`conference`, `meetup`, `workshop`, `webinar`) (required)
 - **videos**: Video archive/YouTube channel URL (optional)

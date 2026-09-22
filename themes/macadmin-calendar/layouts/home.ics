@@ -13,7 +13,10 @@
   {{- $uid := printf "%s-%s@macadmins-calendar" $dtstart (.name | urlize) -}}
   {{- $summary := partial "ics-escape" (.full_name | default .name) -}}
   {{- $location := partial "ics-escape" .location -}}
-  {{- $description := partial "ics-escape" (printf "%s — %s" .name .type) -}}
+  {{- $descText := printf "%s — %s" .name .type -}}
+  {{- $event := . -}}
+  {{- with .organizer }}{{ if ne . $event.name }}{{ $descText = printf "%s — Organized by %s" $descText . }}{{ end }}{{ end -}}
+  {{- $description := partial "ics-escape" $descText -}}
   {{- printf "BEGIN:VEVENT\r\n" -}}
   {{- printf "UID:%s\r\n" $uid -}}
   {{- printf "DTSTAMP:%s\r\n" $stamp -}}

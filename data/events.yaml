@@ -30,7 +30,6 @@ events:
     location: "Online"
     website: "https://developer.apple.com/wwdc25/"
     type: "conference"
-    language: "en"
     videos: "https://developer.apple.com/videos/"
 
   - name: "MDOYVR"
@@ -71,7 +70,6 @@ events:
     location: "Göteborg, Sweden"
     website: "https://www.macsysadmin.se/"
     type: "conference"
-    language: "en"
     archive: "http://documentation.macsysadmin.se/"
     videos: "https://www.youtube.com/@MacSysAdminConference"
 
@@ -148,7 +146,6 @@ events:
     location: "Online"
     website: "https://developer.apple.com/wwdc26/"
     type: "conference"
-    language: "en"
     videos: "https://developer.apple.com/videos/"
 
   - name: "MDOYVR"
@@ -236,7 +233,6 @@ events:
     location: "Göteborg, Sweden"
     website: "https://www.macsysadmin.se/"
     type: "conference"
-    language: "en"
     archive: "http://documentation.macsysadmin.se/"
     videos: "https://www.youtube.com/@MacSysAdminConference"
 

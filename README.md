@@ -64,12 +64,13 @@ Events that will not be a good fit include:
       website: "https://example.com"
       type: "conference"
       videos: "https://youtube.com/channel"  # optional
-      language: "en"                         # optional
+      archive: "https://example.com/archive" # optional
+      language: "fr"                         # optional, non-English events only
     ```
 
 4. Submit a pull request
 
-Pull requests are automatically validated for required fields, date format, and `end_date >= start_date`. To check locally, run `python scripts/validate_events.py` (or use [pre-commit](https://pre-commit.com)).
+Pull requests are automatically validated for required fields, date format, `end_date >= start_date`, absolute http(s) URLs, and language codes. To check locally, run `python scripts/validate_events.py` (or use [pre-commit](https://pre-commit.com)).
 
 ### Event Fields
 
@@ -83,7 +84,7 @@ Pull requests are automatically validated for required fields, date format, and 
 - **type**: Event type (`conference`, `meetup`, `workshop`, `webinar`) (required)
 - **videos**: Video archive/YouTube channel URL (optional)
 - **archive**: Archive/documentation URL (optional)
-- **language**: Primary language code if not English, e.g. "en", "de", "fr" (optional)
+- **language**: ISO 639-1 code, **only when the event is not in English** (optional). The field marks the exception, so an event with no `language` is English — `language: "en"` is redundant and validation rejects it. Codes must exist in [`data/languages.yaml`](data/languages.yaml); add one there, to `LANGUAGE_MAP` in `scripts/issue_to_event.py`, and to the issue form dropdown together.
 
 **Note**: Event status (upcoming/past) is calculated automatically based on dates.
 

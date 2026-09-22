@@ -78,6 +78,37 @@ body:
       label: Session videos (optional)
       description: Link to a channel or playlist if talks are published.
       placeholder: https://
+  - type: input
+    id: archive
+    attributes:
+      label: Documentation archive (optional)
+      description: Link to slides, notes, or session documentation from past editions.
+      placeholder: https://
+  - type: dropdown
+    id: language
+    attributes:
+      label: Event language (optional)
+      description: Only pick one if the event is **not** in English. Leave blank for English-language events.
+      options:
+        - Arabic
+        - Chinese
+        - Czech
+        - Danish
+        - Dutch
+        - Finnish
+        - French
+        - German
+        - Hindi
+        - Hungarian
+        - Italian
+        - Japanese
+        - Korean
+        - Norwegian
+        - Polish
+        - Portuguese
+        - Russian
+        - Spanish
+        - Swedish
   - type: textarea
     id: notes
     attributes:

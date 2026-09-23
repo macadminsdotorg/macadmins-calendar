@@ -259,6 +259,14 @@ events:
     website: "https://luma.com/1e1eh23r"
     type: "meetup"
 
+  - name: "Music City Mac Admins User Group October 2026 Meetup"
+    start_date: "2026-10-16"
+    end_date: "2026-10-16"
+    location: "Nashville, Tennessee"
+    organizer: "Music City Mac Admins User Group"
+    website: "https://luma.com/d8dgvomb"
+    type: "meetup"
+
   - name: "OBTS"
     full_name: "Objective by the Sea"
     start_date: "2026-11-15"

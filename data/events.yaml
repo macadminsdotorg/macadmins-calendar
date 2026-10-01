@@ -310,6 +310,15 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/user/JAMFMedia/featured"
 
+  - name: "Event Name (Test)"
+    full_name: "This is the Full Descriptive Name of the Event"
+    start_date: "2027-11-28"
+    end_date: "2027-11-28"
+    location: "Seattle, WA"
+    organizer: "Apple Admins of Seattle Testing"
+    website: "https://macadmins.org"
+    type: "meetup"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2028-10-17"

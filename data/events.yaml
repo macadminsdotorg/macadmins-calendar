@@ -267,6 +267,14 @@ events:
     website: "https://luma.com/d8dgvomb"
     type: "meetup"
 
+  - name: "East Midlands & Scotland Mac Admins"
+    start_date: "2026-11-03"
+    end_date: "2026-11-03"
+    location: "Online"
+    organizer: "East Midlands & Scotland Mac Admins"
+    website: "https://forms.cloud.microsoft/e/zYqggSdFdP"
+    type: "meetup"
+
   - name: "OBTS"
     full_name: "Objective by the Sea"
     start_date: "2026-11-15"

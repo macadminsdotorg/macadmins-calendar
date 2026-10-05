@@ -252,6 +252,15 @@ events:
     website: "https://forms.cloud.microsoft/r/sy6s969E6g?origin=lprLink"
     type: "meetup"
 
+  - name: "Atlanta Mac Admins - October Social"
+    full_name: "Atlanta Mac Admins"
+    start_date: "2026-10-14"
+    end_date: "2026-10-14"
+    location: "Atlanta, GA, USA"
+    organizer: "Atlanta Mac Admins"
+    website: "https://luma.com/7bjq1522"
+    type: "meetup"
+
   - name: "Texas Apple Admins Round-Up"
     start_date: "2026-10-15"
     end_date: "2026-10-15"

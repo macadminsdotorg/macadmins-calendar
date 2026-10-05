@@ -301,6 +301,15 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/playlist?list=PLmBOyWhgnnx8rv3KJeCkSmDzyi7Jw5IR_"
 
+  - name: "Mac Admins India Connect"
+    start_date: "2027-08-07"
+    end_date: "2027-08-07"
+    location: "Bengaluru, India"
+    organizer: "Mac Admins India"
+    website: "https://conference.macadmins.in/"
+    type: "conference"
+    videos: "https://www.youtube.com/@macadminsindia/"
+
   - name: "JNUC"
     full_name: "Jamf Nation User Conference"
     start_date: "2027-10-26"

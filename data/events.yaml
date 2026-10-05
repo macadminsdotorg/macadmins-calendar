@@ -293,6 +293,14 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/@objectiveseefoundation"
 
+  - name: "Mac Admins Japan Meetup #1"
+    start_date: "2026-12-02"
+    end_date: "2026-12-02"
+    location: "Tokyo, Japan"
+    organizer: "Mac Admins Japan"
+    website: "https://luma.com/eq24ilqt"
+    type: "meetup"
+
   - name: "PSU MacAdmins"
     full_name: "Penn State University MacAdmins Conference"
     start_date: "2027-07-13"

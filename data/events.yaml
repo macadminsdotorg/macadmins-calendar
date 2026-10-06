@@ -301,6 +301,15 @@ events:
     website: "https://luma.com/eq24ilqt"
     type: "meetup"
 
+  - name: "Mac Admins Europe"
+    start_date: "2027-04-15"
+    end_date: "2027-04-15"
+    location: "Leiden, Netherlands"
+    website: "https://macadmins-eu.org/"
+    type: "conference"
+    videos: "https://www.youtube.com/@MacAdminsEU"
+    archive: "https://macadmins-eu.org/previous-years/"
+
   - name: "PSU MacAdmins"
     full_name: "Penn State University MacAdmins Conference"
     start_date: "2027-07-13"

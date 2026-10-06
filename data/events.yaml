@@ -276,6 +276,14 @@ events:
     website: "https://luma.com/d8dgvomb"
     type: "meetup"
 
+  - name: "October Meetup"
+    start_date: "2026-10-29"
+    end_date: "2026-10-29"
+    location: "Philadelphia, PA USA"
+    organizer: "Greater Philadelphia Mac Admins"
+    website: "https://www.eventbrite.com/e/october-meetup-tickets-2003029991625"
+    type: "meetup"
+
   - name: "East Midlands & Scotland Mac Admins"
     start_date: "2026-11-03"
     end_date: "2026-11-03"

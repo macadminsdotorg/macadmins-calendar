@@ -276,6 +276,15 @@ events:
     website: "https://luma.com/d8dgvomb"
     type: "meetup"
 
+  - name: "October 2026 Meetup"
+    full_name: "NYC Mac Admins October 2026 Meetup"
+    start_date: "2026-10-27"
+    end_date: "2026-10-27"
+    location: "New York, NY"
+    organizer: "NYC Mac Admins"
+    website: "https://nycmacadmins.com/events/2026-10-27-october-meetup/"
+    type: "meetup"
+
   - name: "October Meetup"
     start_date: "2026-10-29"
     end_date: "2026-10-29"

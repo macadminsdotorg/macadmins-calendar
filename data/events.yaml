@@ -276,6 +276,17 @@ events:
     website: "https://luma.com/d8dgvomb"
     type: "meetup"
 
+  - name: "University of Utah - MacAdmins Meeting"
+    full_name: "University of Utah - MacAdmins Meeting"
+    start_date: "2026-10-21"
+    end_date: "2026-10-21"
+    location: "Salt Lake City, Utah"
+    organizer: "Marriott Library"
+    website: "https://apple.lib.utah.edu"
+    type: "meetup"
+    videos: "https://stream.lib.utah.edu/index.php?c=browse&m=results&q=%22mac+manager%22&cat=&sort=newest"
+    archive: "https://apple.lib.utah.edu"
+
   - name: "October 2026 Meetup"
     full_name: "NYC Mac Admins October 2026 Meetup"
     start_date: "2026-10-27"

@@ -304,6 +304,15 @@ events:
     website: "https://www.eventbrite.com/e/october-meetup-tickets-2003029991625"
     type: "meetup"
 
+  - name: "MacAdmins LatAm Meetup: Enterprise Apple IT, MDM Security & AI Governance"
+    start_date: "2026-10-29"
+    end_date: "2026-10-29"
+    location: "CDMX, Mexico"
+    organizer: "MacAdmins LatAm"
+    website: "https://luma.com/mxtw-185040fe"
+    type: "meetup"
+    language: "es"
+
   - name: "East Midlands & Scotland Mac Admins"
     start_date: "2026-11-03"
     end_date: "2026-11-03"

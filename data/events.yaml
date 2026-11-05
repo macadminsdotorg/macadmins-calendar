@@ -330,6 +330,14 @@ events:
     type: "conference"
     videos: "https://www.youtube.com/@objectiveseefoundation"
 
+  - name: "Atlanta Mac Admins"
+    start_date: "2026-11-17"
+    end_date: "2026-11-17"
+    location: "Marietta, GA"
+    organizer: "Atlanta Mac Admins"
+    website: "https://luma.com/6ja4nguh"
+    type: "meetup"
+
   - name: "Mac Admins Japan Meetup #1"
     start_date: "2026-12-02"
     end_date: "2026-12-02"

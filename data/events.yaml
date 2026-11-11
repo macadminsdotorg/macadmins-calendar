@@ -338,6 +338,15 @@ events:
     website: "https://luma.com/6ja4nguh"
     type: "meetup"
 
+  - name: "Los Angeles Mac Admins Meetup | November 2026"
+    full_name: "Los Angeles Mac Admins Meetup | November 2026"
+    start_date: "2026-11-19"
+    end_date: "2026-11-19"
+    location: "Los Ángeles, CA"
+    organizer: "Los Ángeles Mac Adminns"
+    website: "https://luma.com/3ol7rs1l"
+    type: "meetup"
+
   - name: "Mac Admins Japan Meetup #1"
     start_date: "2026-12-02"
     end_date: "2026-12-02"

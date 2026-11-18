@@ -2,7 +2,9 @@ name: Preview event submission
 
 # Replies to an event-submission issue with how the event will look on the
 # calendar and whether it passes validation, and keeps that one comment up
-# to date as the submitter edits the issue. Nothing is written to the repo.
+# to date as the submitter edits the issue. The comment includes a screenshot
+# of the card on macadmins.org, saved to the preview-images branch; nothing is
+# written to main.
 on:
   issues:
     types: [opened, edited, reopened]
@@ -16,20 +18,64 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'event-submission') && github.event.issue.state == 'open'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      # write: only to push card screenshots to the preview-images branch.
+      # Nothing here writes to main.
+      contents: write
       issues: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - run: pip install pyyaml
-      - name: Build preview
+      - run: pip install pyyaml playwright
+      # Screenshot the card as macadmins.org renders it, by opening the submit
+      # page with this submission's answers in the link. Best effort: if any
+      # of it fails (or the page doesn't fill itself in), the comment is
+      # posted without an image.
+      - name: Screenshot the card
+        id: shot
+        continue-on-error: true
         env:
           # Untrusted input: only ever passed via environment, never
           # interpolated into run steps.
           ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          url=$(python scripts/issue_to_event.py --card-url)
+          [ -n "$url" ] || exit 0
+          python -m playwright install --with-deps chromium > /dev/null
+          python scripts/screenshot_card.py "$url" "$RUNNER_TEMP/card.png" || exit 0
+          # One file per version of the card, so a cached image never shows
+          # an old version. Images live on their own branch, outside main.
+          path="issue-$ISSUE/$(sha256sum "$RUNNER_TEMP/card.png" | cut -c1-12).png"
+          wt="$RUNNER_TEMP/preview-images"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin preview-images > /dev/null; then
+            git fetch --depth=1 origin preview-images
+            git worktree add "$wt" FETCH_HEAD
+          else
+            git worktree add --detach "$wt"
+            git -C "$wt" checkout --orphan preview-images
+            git -C "$wt" rm -rfq .
+          fi
+          mkdir -p "$wt/issue-$ISSUE"
+          cp "$RUNNER_TEMP/card.png" "$wt/$path"
+          git -C "$wt" add "$path"
+          git -C "$wt" diff --cached --quiet || git -C "$wt" commit -qm "Card preview for #$ISSUE"
+          # Another submission may have pushed meanwhile; each writes its own
+          # files, so rebasing onto theirs never conflicts.
+          for attempt in 1 2 3; do
+            git -C "$wt" push -q origin HEAD:refs/heads/preview-images && break
+            git -C "$wt" pull -q --rebase origin preview-images
+          done
+          echo "url=https://raw.githubusercontent.com/$REPO/preview-images/$path" >> "$GITHUB_OUTPUT"
+      - name: Build preview
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
           PREVIEW_PATH: ${{ runner.temp }}/preview.md
+          PREVIEW_IMAGE_URL: ${{ steps.shot.outputs.url }}
         run: python scripts/issue_to_event.py --preview
       - name: Post or update the preview comment
         env:

@@ -206,6 +206,35 @@ def write_output(name, value):
 
 PREVIEW_MARKER = "<!-- event-submission-preview -->"
 
+# The macadmins.org submit page fills itself in from these query parameters
+# (the issue form's field ids and dropdown labels) and renders the real card.
+# The preview workflow opens it to screenshot that card for its comment.
+SUBMIT_PAGE_URL = "https://macadmins.org/calendar/submit/"
+
+
+def card_url(body):
+    """The submit page's address with this submission's answers filled in."""
+    from urllib.parse import urlencode
+
+    event = build_event(parse_issue_body(body))
+    if not event.get("name") or not event.get("start_date"):
+        return ""
+    names = {code: name for name, code in LANGUAGE_MAP.items()}
+    params = {"name": event["name"]}
+    if event.get("organizer"):
+        params["organizer"] = event["organizer"]
+    if event.get("type"):
+        params["type"] = event["type"].capitalize()
+    params["start_date"] = event["start_date"]
+    if event.get("end_date") and event["end_date"] != event["start_date"]:
+        params["end_date"] = event["end_date"]
+    for field in ("location", "website", "videos"):
+        if event.get(field):
+            params[field] = event[field]
+    if event.get("language"):
+        params["language"] = names.get(event["language"], event["language"])
+    return SUBMIT_PAGE_URL + "?" + urlencode(params)
+
 MONTHS = (
     "january", "february", "march", "april", "may", "june", "july",
     "august", "september", "october", "november", "december",
@@ -281,6 +310,11 @@ def build_preview(body):
             )
 
     lines = [PREVIEW_MARKER, "### Calendar preview", ""]
+    # Screenshot of the card on macadmins.org, when the workflow managed to
+    # take one (see SUBMIT_PAGE_URL). The text version follows either way.
+    image = os.environ.get("PREVIEW_IMAGE_URL")
+    if image:
+        lines += [f"![How this event will appear on macadmins.org]({image})", ""]
     if event.get("name"):
         title = event.get("full_name") or event["name"]
         meta = [format_dates(event.get("start_date", "?"), event.get("end_date", "?")),
@@ -333,6 +367,12 @@ def main():
     # --preview writes a Markdown summary for the issue comment and leaves
     # events.yaml untouched. It exits 0 even when the submission has
     # problems; those are reported in the summary.
+    # --card-url prints the submit page's address with this submission's
+    # answers in it (nothing if the name or date can't be read).
+    if "--card-url" in sys.argv[1:]:
+        print(card_url(body))
+        return 0
+
     if "--preview" in sys.argv[1:]:
         markdown, ok = build_preview(body)
         out = os.environ.get("PREVIEW_PATH")

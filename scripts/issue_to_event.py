@@ -15,19 +15,28 @@ from pathlib import Path
 
 EVENTS_PATH = Path(__file__).resolve().parent.parent / "data" / "events.yaml"
 
-# Issue form label -> events.yaml field
+# Issue form label -> events.yaml field. The current form's labels come
+# first; the rest are earlier labels, kept so an issue filed before a form
+# change still converts when it is approved. full_name and archive are no
+# longer on the form (maintainers add them by hand) but are still read from
+# older issues.
 FIELD_MAP = {
     "Event name": "name",
+    "Organizing group (optional)": "organizer",
+    "Event type": "type",
+    "Date": "start_date",
+    "End date (multi-day events only)": "end_date",
+    "Location": "location",
+    "Event website or sign-up page": "website",
+    "Recordings (optional)": "videos",
+    "Event language (optional)": "language",
+    # Earlier labels
     "Full name (optional)": "full_name",
     "Event website": "website",
     "Start date": "start_date",
     "End date": "end_date",
-    "Location": "location",
-    "Organizing group (optional)": "organizer",
-    "Event type": "type",
     "Session videos (optional)": "videos",
     "Documentation archive (optional)": "archive",
-    "Event language (optional)": "language",
 }
 
 # Issue form dropdown option -> events.yaml type. Unmapped options fall
@@ -36,7 +45,7 @@ FIELD_MAP = {
 TYPE_MAP = {
     "Conference": "conference",
     "Meetup": "meetup",
-    "User group": "meetup",
+    "User group": "meetup",  # earlier form option
     "Workshop": "workshop",
     "Webinar": "webinar",
 }
@@ -140,6 +149,15 @@ def build_event(sections):
     for field in URL_FIELDS:
         if event.get(field):
             event[field] = normalize_url(event[field])
+    # The form only asks for an end date on multi-day events; a blank one
+    # means the event is a single day.
+    if event.get("start_date") and not event.get("end_date"):
+        event["end_date"] = event["start_date"]
+    # Drop a full name or organizer that only repeats the event name, so the
+    # card doesn't print the same text twice.
+    for field in ("full_name", "organizer"):
+        if event.get(field) and event[field].casefold() == event.get("name", "").casefold():
+            del event[field]
     return event
 
 

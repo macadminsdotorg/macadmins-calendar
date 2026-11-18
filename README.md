@@ -75,7 +75,7 @@ Pull requests are automatically validated for required fields, date format, `end
 ### Event Fields
 
 - **name**: Conference/event name (required)
-- **full_name**: Longer, more descriptive conference name (optional)
+- **full_name**: Longer, more descriptive conference name (optional). When set, it replaces `name` as the headline on event cards and in the calendar feed, so use it only to spell out a well-known acronym (JNUC, WWDC). It is not on the submission form; maintainers add it by hand.
 - **start_date**: Start date in YYYY-MM-DD format (required)
 - **end_date**: End date in YYYY-MM-DD format, same as start_date for single-day events (required)
 - **location**: City, State/Province, Country (required)
@@ -83,7 +83,7 @@ Pull requests are automatically validated for required fields, date format, `end
 - **website**: Official website URL (required)
 - **type**: Event type (`conference`, `meetup`, `workshop`, `webinar`) (required)
 - **videos**: Video archive/YouTube channel URL (optional)
-- **archive**: Archive/documentation URL (optional)
+- **archive**: Archive/documentation URL (optional). Not on the submission form; maintainers add it by hand.
 - **language**: ISO 639-1 code, **only when the event is not in English** (optional). The field marks the exception, so an event with no `language` is English — `language: "en"` is redundant and validation rejects it. Codes must exist in [`data/languages.yaml`](data/languages.yaml); add one there, to `LANGUAGE_MAP` in `scripts/issue_to_event.py`, and to the issue form dropdown together.
 
 **Note**: Event status (upcoming/past) is calculated automatically based on dates.

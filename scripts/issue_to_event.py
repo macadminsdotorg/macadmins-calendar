@@ -295,7 +295,10 @@ def build_preview(body):
             links.append(f"[Archive]({event['archive']})")
         lines += [f"> **{title}**", "> ", "> " + " · ".join(meta)]
         if event.get("language"):
-            lines += ["> ", f"> _Language: {event['language']}_"]
+            # Show the name the submitter picked, not the stored ISO code. An
+            # unmapped value falls through as itself, as it does on the site.
+            names = {code: name for name, code in LANGUAGE_MAP.items()}
+            lines += ["> ", f"> _Language: {names.get(event['language'], event['language'])}_"]
         if links:
             lines += ["> ", "> " + "  ".join(links)]
         lines.append("")

@@ -18,6 +18,10 @@ disableKinds = ['taxonomy', 'term']
   highlightHoverDark = '#79b8ff'
   highlightLightDark = '#1f3a2a'
   highlightTextDark = '#7ee0a4'
+  # The submit page sends finished submissions to this issue form.
+  submitIssueURL = 'https://github.com/macadminsdotorg/macadmins-calendar/issues/new'
+  submitIssueTemplate = 'event-submission.yml'
+  submitSlackURL = 'https://macadmins.slack.com/archives/C03G27DCDC4'
 
 [[menu.main]]
   name = 'Events List'
@@ -28,6 +32,11 @@ disableKinds = ['taxonomy', 'term']
   name = 'Calendar'
   url = '/calendar/'
   weight = 20
+
+[[menu.main]]
+  name = 'Submit an Event'
+  url = '/submit/'
+  weight = 25
 
 [[menu.main]]
   name = 'About'

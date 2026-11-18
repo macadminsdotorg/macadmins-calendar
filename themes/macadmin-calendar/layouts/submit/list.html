@@ -1,0 +1,332 @@
+{{ define "main" }}
+{{/*
+  Submit page: a form with a live preview of the event card and month
+  calendar. Submitting opens the GitHub issue form with every answer filled
+  in, so the existing review and approval workflow is unchanged.
+
+  Field ids match the ids in .github/ISSUE_TEMPLATE/event-submission.yml;
+  GitHub pre-fills an issue form field from the query parameter with the
+  same id. Keep the two in step, including dropdown option labels.
+*/}}
+<div class="submit-page">
+    <h1>{{ .Title }}</h1>
+    <div class="submit-intro">{{ .Content }}</div>
+
+    <div class="submit-layout">
+        <form id="submit-form" class="submit-form" novalidate>
+            <div class="submit-field">
+                <label for="f-name">Event name <span class="submit-req" aria-hidden="true">*</span></label>
+                <p class="submit-help" id="h-name">The title shown everywhere on the calendar. Include your group's name so it makes sense on its own, and leave the date out (we show it separately).</p>
+                <input id="f-name" name="name" required aria-describedby="h-name" placeholder="e.g. Greater Philadelphia Mac Admins Meetup" autocomplete="off">
+            </div>
+            <div class="submit-field">
+                <label for="f-organizer">Organizing group <span class="submit-opt">(optional)</span></label>
+                <p class="submit-help" id="h-organizer">The user group, company, or organization that runs the event. Leave blank if the event name already says it.</p>
+                <input id="f-organizer" name="organizer" aria-describedby="h-organizer" placeholder="e.g. Greater Philadelphia Mac Admins" autocomplete="off">
+            </div>
+            <div class="submit-field">
+                <label for="f-type">Event type <span class="submit-req" aria-hidden="true">*</span></label>
+                <p class="submit-help" id="h-type">Pick Meetup for user group meetings.</p>
+                <select id="f-type" name="type" required aria-describedby="h-type">
+                    <option value="">Select a type</option>
+                    <option>Meetup</option>
+                    <option>Conference</option>
+                    <option>Workshop</option>
+                    <option>Webinar</option>
+                </select>
+            </div>
+            <div class="submit-row">
+                <div class="submit-field">
+                    <label for="f-start_date">Date <span class="submit-req" aria-hidden="true">*</span></label>
+                    <p class="submit-help" id="h-start_date">For a multi-day event, the first day.</p>
+                    <input id="f-start_date" name="start_date" type="date" required aria-describedby="h-start_date">
+                </div>
+                <div class="submit-field">
+                    <label for="f-end_date">End date <span class="submit-opt">(multi-day only)</span></label>
+                    <p class="submit-help" id="h-end_date">Leave blank for a one-day event.</p>
+                    <input id="f-end_date" name="end_date" type="date" aria-describedby="h-end_date">
+                </div>
+            </div>
+            <div class="submit-field">
+                <label for="f-location">Location <span class="submit-req" aria-hidden="true">*</span></label>
+                <p class="submit-help" id="h-location">City, then state or province if your country uses them, then country. No street addresses or venue names. Write "Online" for a virtual event. Examples: Philadelphia, PA, USA &middot; Brighton, UK &middot; Tokyo, Japan &middot; Online</p>
+                <input id="f-location" name="location" required aria-describedby="h-location" placeholder="Philadelphia, PA, USA" autocomplete="off">
+            </div>
+            <div class="submit-field">
+                <label for="f-website">Event website or sign-up page <span class="submit-req" aria-hidden="true">*</span></label>
+                <input id="f-website" name="website" type="url" inputmode="url" required placeholder="https://" autocomplete="off">
+            </div>
+            <div class="submit-field">
+                <label for="f-videos">Recordings <span class="submit-opt">(optional)</span></label>
+                <p class="submit-help" id="h-videos">Link to a channel or playlist where past talks are published.</p>
+                <input id="f-videos" name="videos" type="url" inputmode="url" aria-describedby="h-videos" placeholder="https://" autocomplete="off">
+            </div>
+            <div class="submit-field">
+                <label for="f-language">Event language <span class="submit-opt">(optional)</span></label>
+                <p class="submit-help" id="h-language">Only pick one if the event is not in English.</p>
+                <select id="f-language" name="language" aria-describedby="h-language">
+                    <option value="">English</option>
+                    {{ $names := slice }}
+                    {{ range $code, $name := site.Data.languages.languages }}{{ if ne $code "en" }}{{ $names = $names | append $name }}{{ end }}{{ end }}
+                    {{ range sort $names }}<option>{{ . }}</option>{{ end }}
+                </select>
+            </div>
+            <div class="submit-field">
+                <label for="f-notes">Anything else? <span class="submit-opt">(optional)</span></label>
+                <p class="submit-help" id="h-notes">Extra context for the reviewer, or how you're connected to the event. This isn't shown on the calendar.</p>
+                <textarea id="f-notes" name="notes" rows="3" aria-describedby="h-notes"></textarea>
+            </div>
+            <div class="submit-field submit-check">
+                <input id="f-eligibility" name="eligibility" type="checkbox" required>
+                <label for="f-eligibility">This event is relevant to the Mac admin community and welcomes all attendees. It isn't a sales pitch, invite-only, or pre-recorded.</label>
+            </div>
+            <button type="button" id="submit-clear" class="submit-clear">Clear the form</button>
+        </form>
+
+        <aside class="submit-preview" aria-label="Preview">
+            <h2>Preview</h2>
+            <p class="submit-preview-label">On the Events page and the home page</p>
+            <div id="p-card"></div>
+
+            <p class="submit-preview-label">On the month calendar</p>
+            <div id="p-month" class="submit-month"></div>
+
+            <div id="p-checks" class="submit-checks" aria-live="polite"></div>
+
+            <div class="submit-actions">
+                <a id="submit-go" class="btn btn-primary" href="#" target="_blank" rel="noopener" aria-disabled="true">Continue to GitHub</a>
+                <p class="submit-help">Opens the GitHub submission form with your answers filled in. Check them and select <strong>Create</strong>. You'll need a free GitHub account.</p>
+                <p class="submit-help">No GitHub account? <button type="button" id="submit-copy" class="submit-linkbtn">Copy your answers</button> and paste them in the <a href="{{ site.Params.submitSlackURL }}" target="_blank" rel="noopener">#macadminsfoundation</a> channel on the Mac Admins Slack.</p>
+                <p id="submit-copied" class="submit-help" role="status"></p>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<script>
+(function () {
+    const EVENTS = {{ site.Data.events.events | jsonify | safeJS }};
+    const LANGS = {{ site.Data.languages.languages | jsonify | safeJS }};
+    const ISSUE_URL = {{ site.Params.submitIssueURL }};
+    const TEMPLATE = {{ site.Params.submitIssueTemplate }};
+    const FIELDS = ["name", "organizer", "type", "start_date", "end_date", "location", "website", "videos", "language", "notes"];
+    const REQUIRED = {name: "Event name", type: "Event type", start_date: "Date", location: "Location", website: "Event website"};
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const STORE = "submit-draft";
+
+    const form = document.getElementById("submit-form");
+    const el = id => document.getElementById(id);
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+    const langCode = name => Object.keys(LANGS).find(k => LANGS[k] === name) || "";
+
+    function readValues() {
+        const v = {};
+        FIELDS.forEach(f => { v[f] = el("f-" + f).value.trim().split(/\s+/).join(" "); });
+        v.notes = el("f-notes").value.trim();
+        v.eligibility = el("f-eligibility").checked;
+        return v;
+    }
+
+    // Same clean-up the converter (scripts/issue_to_event.py) applies.
+    function normalizeUrl(u) {
+        if (!u || /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(u)) return u;
+        if (u.startsWith("//")) return "https:" + u;
+        return "https://" + u.replace(/^\/+/, "");
+    }
+    function toEvent(v) {
+        const e = {name: v.name, location: v.location, type: v.type.toLowerCase(), start_date: v.start_date,
+            end_date: v.end_date || v.start_date, website: normalizeUrl(v.website), videos: normalizeUrl(v.videos),
+            language: langCode(v.language), organizer: v.organizer};
+        if (e.organizer && e.organizer.toLowerCase() === e.name.toLowerCase()) e.organizer = "";
+        return e;
+    }
+    function parseDate(s) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return null;
+        const [y, m, d] = s.split("-").map(Number);
+        const dt = new Date(y, m - 1, d);
+        return dt.getMonth() === m - 1 && dt.getDate() === d ? dt : null;
+    }
+
+    function check(v, e) {
+        const todo = [], errors = [], tips = [];
+        Object.keys(REQUIRED).forEach(f => { if (!v[f]) todo.push(REQUIRED[f]); });
+        if (!v.eligibility) todo.push("Eligibility confirmation");
+        const start = parseDate(e.start_date), end = parseDate(e.end_date);
+        if (v.start_date && !start) errors.push("The date isn't a real date.");
+        if (start && v.end_date && !end) errors.push("The end date isn't a real date.");
+        if (start && end && end < start) errors.push("The end date is before the start date.");
+        ["website", "videos"].forEach(f => {
+            if (e[f] && !/^https?:\/\/[^\s/]+\.[^\s]+$/.test(e[f])) errors.push((f === "website" ? "The website" : "The recordings link") + " doesn't look like a web address.");
+        });
+        if (e.name && e.start_date && EVENTS.some(x => x.name === e.name && String(x.start_date) === e.start_date)) {
+            errors.push("An event with this name and date is already on the calendar.");
+        }
+        const name = (e.name || "").toLowerCase();
+        if (MONTHS.some(m => new RegExp("\\b" + m.toLowerCase() + "\\b").test(name)) || /\b20\d\d\b/.test(name)) {
+            tips.push("The name contains a month or year. The calendar already shows the date, so consider removing it.");
+        }
+        const loc = e.location || "";
+        if (loc && loc.toLowerCase() !== "online") {
+            if (/^\d/.test(loc)) tips.push("The location looks like a street address. Use the city, region and country instead.");
+            else if (!loc.includes(",")) tips.push("Add the country to the location, e.g. \"Brighton, UK\".");
+        }
+        if (e.type === "meetup" && !e.organizer) tips.push("If the event name doesn't say who runs it, add the organizing group.");
+        if (start && end && end >= start) {
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            if (end < today) tips.push("This event has already happened. That's fine for the archive, but check the year.");
+        }
+        return {todo, errors, tips, start, end};
+    }
+
+    // Mirrors partials/event-item.html.
+    function renderCard(e, c) {
+        if (!e.name && !e.start_date) {
+            el("p-card").innerHTML = '<p class="submit-empty">Start filling in the form to see your event card.</p>';
+            return;
+        }
+        const ok = c.start && c.end && c.end >= c.start;
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        const upcoming = !ok || c.end >= today;
+        let date = "Date to come";
+        if (ok) {
+            date = MONTHS[c.start.getMonth()] + " " + c.start.getDate() + (e.start_date !== e.end_date
+                ? " - " + MONTHS[c.end.getMonth()] + " " + c.end.getDate() + ", " + c.end.getFullYear()
+                : ", " + c.start.getFullYear());
+        }
+        const type = e.type ? e.type.charAt(0).toUpperCase() + e.type.slice(1) : "Type";
+        el("p-card").innerHTML =
+            '<div class="event-item ' + (upcoming ? "upcoming" : "past") + '">' +
+              '<div class="event-main">' +
+                '<h3><a href="' + esc(e.website || "#") + '" target="_blank" rel="noopener noreferrer">' + esc(e.name || "Event name") + '</a></h3>' +
+                '<div class="event-meta">' +
+                  '<span class="event-date"><span aria-hidden="true">📅</span> ' + esc(date) + '</span>' +
+                  '<span class="event-location"><span aria-hidden="true">📍</span> ' + esc(e.location || "Location") + '</span>' +
+                  (e.organizer ? '<span class="event-organizer"><span aria-hidden="true">👥</span> ' + esc(e.organizer) + '</span>' : "") +
+                  '<span class="event-status-badge ' + (upcoming ? "upcoming" : "past") + '">' + (upcoming ? "Upcoming" : "Past") + '</span>' +
+                  '<span class="event-type-badge"><span aria-hidden="true">🏷️</span> ' + esc(type) + '</span>' +
+                '</div>' +
+                (e.language ? '<div class="event-language"><span aria-hidden="true">🌐</span> Language: ' + esc(LANGS[e.language]) + '</div>' : "") +
+              '</div>' +
+              '<div class="event-links">' +
+                '<a href="' + esc(e.website || "#") + '" target="_blank" rel="noopener noreferrer" class="event-link"><span aria-hidden="true">🌐</span> Website</a>' +
+                (e.videos ? '<a href="' + esc(e.videos) + '" target="_blank" rel="noopener noreferrer" class="event-link"><span aria-hidden="true">📹</span> Videos</a>' : "") +
+              '</div>' +
+            '</div>';
+    }
+
+    function renderMonth(e, c) {
+        if (!c.start) {
+            el("p-month").innerHTML = '<p class="submit-empty">Pick a date to see where it lands, alongside the events already listed.</p>';
+            return;
+        }
+        const y = c.start.getFullYear(), m = c.start.getMonth();
+        const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
+        const cur = new Date(y, m, 1 - first.getDay());
+        const others = EVENTS.map(x => ({n: x.name, s: parseDate(String(x.start_date)), e: parseDate(String(x.end_date || x.start_date))})).filter(x => x.s && x.e);
+        const mineEnd = c.end && c.end >= c.start ? c.end : c.start;
+        let html = '<p class="submit-month-title">' + MONTHS[m] + " " + y + '</p><div class="submit-month-grid">';
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(d => { html += '<div class="submit-month-head">' + d + "</div>"; });
+        while (cur <= last || cur.getDay() !== 0) {
+            let bars = "";
+            if (cur >= c.start && cur <= mineEnd) bars += '<span class="submit-bar mine">' + esc(e.name || "Your event") + "</span>";
+            others.filter(o => cur >= o.s && cur <= o.e).forEach(o => { bars += '<span class="submit-bar" title="' + esc(o.n) + '">' + esc(o.n) + "</span>"; });
+            html += '<div class="submit-month-day' + (cur.getMonth() === m ? "" : " other-month") + '"><span class="submit-month-num">' + cur.getDate() + "</span>" + bars + "</div>";
+            cur.setDate(cur.getDate() + 1);
+        }
+        el("p-month").innerHTML = html + "</div>";
+    }
+
+    function renderChecks(c) {
+        let html = "";
+        if (c.todo.length) html += '<div class="submit-check-group todo"><p>Still needed</p><ul>' + c.todo.map(t => "<li>" + esc(t) + "</li>").join("") + "</ul></div>";
+        if (c.errors.length) html += '<div class="submit-check-group error"><p>Needs fixing</p><ul>' + c.errors.map(t => "<li>" + esc(t) + "</li>").join("") + "</ul></div>";
+        if (c.tips.length) html += '<div class="submit-check-group tip"><p>Suggestions (optional)</p><ul>' + c.tips.map(t => "<li>" + esc(t) + "</li>").join("") + "</ul></div>";
+        if (!c.todo.length && !c.errors.length) html = '<div class="submit-check-group ready"><p>Ready to send</p></div>' + html;
+        el("p-checks").innerHTML = html;
+    }
+
+    function issueLink(v, e) {
+        const p = new URLSearchParams();
+        p.set("template", TEMPLATE);
+        p.set("title", "[Event] " + v.name);
+        p.set("name", v.name);
+        if (v.organizer) p.set("organizer", v.organizer);
+        p.set("type", v.type);
+        p.set("start_date", v.start_date);
+        if (v.end_date && v.end_date !== v.start_date) p.set("end_date", v.end_date);
+        p.set("location", v.location);
+        p.set("website", e.website);
+        if (e.videos) p.set("videos", e.videos);
+        if (v.language) p.set("language", v.language);
+        if (v.notes) p.set("notes", v.notes);
+        return ISSUE_URL + "?" + p.toString();
+    }
+
+    function plainText(v, e) {
+        return [
+            "Event name: " + v.name,
+            v.organizer && "Organizing group: " + v.organizer,
+            "Type: " + v.type,
+            "Date: " + e.start_date + (e.end_date !== e.start_date ? " to " + e.end_date : ""),
+            "Location: " + v.location,
+            "Website: " + e.website,
+            e.videos && "Recordings: " + e.videos,
+            v.language && "Language: " + v.language,
+            v.notes && "Notes: " + v.notes,
+        ].filter(Boolean).join("\n");
+    }
+
+    let current = null;
+    function update() {
+        const v = readValues();
+        const e = toEvent(v);
+        const c = check(v, e);
+        renderCard(e, c);
+        renderMonth(e, c);
+        renderChecks(c);
+        const ready = !c.todo.length && !c.errors.length;
+        const go = el("submit-go");
+        go.setAttribute("aria-disabled", ready ? "false" : "true");
+        go.href = ready ? issueLink(v, e) : "#";
+        current = {v, e, ready};
+        try { localStorage.setItem(STORE, JSON.stringify(v)); } catch (err) {}
+    }
+
+    el("submit-go").addEventListener("click", ev => {
+        if (!current || !current.ready) {
+            ev.preventDefault();
+            el("p-checks").scrollIntoView({behavior: "smooth", block: "nearest"});
+        }
+    });
+    el("submit-copy").addEventListener("click", () => {
+        if (!current) return;
+        const text = plainText(current.v, current.e);
+        const done = msg => { el("submit-copied").textContent = msg; };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => done("Copied. Paste it into Slack."), () => done(text));
+        } else {
+            done(text);
+        }
+    });
+    el("submit-clear").addEventListener("click", () => {
+        form.reset();
+        try { localStorage.removeItem(STORE); } catch (err) {}
+        el("submit-copied").textContent = "";
+        update();
+    });
+    form.addEventListener("input", update);
+    form.addEventListener("change", update);
+    form.addEventListener("submit", ev => ev.preventDefault());
+
+    // Restore an unsent draft.
+    try {
+        const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+        if (saved) {
+            FIELDS.forEach(f => { if (saved[f]) el("f-" + f).value = saved[f]; });
+            el("f-eligibility").checked = !!saved.eligibility;
+        }
+    } catch (err) {}
+    update();
+})();
+</script>
+{{ end }}

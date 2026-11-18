@@ -1051,3 +1051,296 @@ footer a:hover {
         text-align: left;
     }
 }
+
+/* Submit page: form on the left, live preview on the right (stacked on narrow screens). */
+.submit-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.submit-intro {
+    max-width: 70ch;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.submit-intro p + p {
+    margin-top: 0.75rem;
+}
+
+.submit-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (min-width: 960px) {
+    .submit-layout {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    }
+
+    .submit-preview {
+        position: sticky;
+        top: 1rem;
+    }
+}
+
+.submit-form,
+.submit-preview {
+    background: var(--bg-surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+    min-width: 0;
+}
+
+.submit-form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.submit-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+}
+
+.submit-field {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.submit-field label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.submit-req {
+    color: #d63333;
+}
+
+.submit-opt {
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.submit-help {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.submit-field input:not([type="checkbox"]),
+.submit-field select,
+.submit-field textarea {
+    font: inherit;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--bg-muted);
+    border-radius: 6px;
+    background: var(--bg-surface-alt);
+    color: var(--text-primary);
+}
+
+.submit-field input:focus-visible,
+.submit-field select:focus-visible,
+.submit-field textarea:focus-visible,
+.submit-linkbtn:focus-visible,
+.submit-clear:focus-visible,
+.submit-actions .btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.submit-check {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0.6rem;
+}
+
+.submit-check input {
+    margin-top: 0.3rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.submit-check label {
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.submit-clear,
+.submit-linkbtn {
+    font: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.submit-clear {
+    justify-self: start;
+    font-size: 0.875rem;
+}
+
+.submit-preview h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.submit-preview-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin: 1.25rem 0 0.5rem;
+}
+
+.submit-preview .event-item {
+    background: var(--bg-surface-alt);
+    margin-bottom: 0;
+    box-shadow: none;
+    border: 1px solid var(--border-subtle);
+}
+
+.submit-empty {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.submit-month {
+    overflow-x: auto;
+}
+
+.submit-month-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.submit-month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(56px, 1fr));
+    gap: 1px;
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
+    min-width: 420px;
+}
+
+.submit-month-head {
+    background: var(--bg-muted);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.2rem;
+    color: var(--text-secondary);
+}
+
+.submit-month-day {
+    background: var(--bg-surface);
+    min-height: 3.5rem;
+    padding: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.submit-month-day.other-month {
+    background: var(--bg-day-other-month);
+}
+
+.submit-month-num {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.submit-bar {
+    font-size: 0.68rem;
+    line-height: 1.25;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: var(--bg-muted);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.submit-bar.mine {
+    background: var(--accent);
+    color: var(--text-on-accent);
+    font-weight: 600;
+    white-space: normal;
+}
+
+.submit-checks {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+.submit-check-group {
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface-alt);
+    color: var(--text-primary);
+}
+
+.submit-check-group p {
+    font-weight: 600;
+    margin: 0;
+}
+
+.submit-check-group ul {
+    margin: 0.3rem 0 0;
+    padding-left: 1.2rem;
+}
+
+.submit-check-group.ready {
+    background: var(--accent-soft-bg);
+    color: var(--accent-soft-text);
+    border-color: transparent;
+}
+
+.submit-check-group.error {
+    border-left: 4px solid #d63333;
+}
+
+.submit-check-group.todo {
+    border-left: 4px solid var(--text-muted);
+}
+
+.submit-check-group.tip {
+    border-left: 4px solid #d4a017;
+}
+
+.submit-actions {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+.submit-actions .btn {
+    justify-self: start;
+}
+
+.submit-actions .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#submit-copied {
+    white-space: pre-wrap;
+}

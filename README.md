@@ -31,7 +31,9 @@ There are two ways to add an event; please ensure it meets our event eligibility
 
 ### Submitting via the event form (easiest)
 
-Fill in the [event submission form](https://github.com/macadminsdotorg/macadmins-calendar/issues/new?template=event-submission.yml) (also linked from [macadmins.org/calendar/submit](https://macadmins.org/calendar/submit/)). A Mac Admins Foundation volunteer will review it, and approved events are added automatically — no git knowledge required.
+Use the **Submit an Event** page on the calendar site (`/submit/`). It shows a live preview of the event card and the month calendar as you type, and checks for common problems. When it's ready, **Continue to GitHub** opens the [event submission form](https://github.com/macadminsdotorg/macadmins-calendar/issues/new?template=event-submission.yml) with every answer filled in; select **Create** to send it. You can also fill in the GitHub form directly. Either way, a Mac Admins Foundation volunteer reviews the submission, and approved events are added automatically, with no git knowledge required.
+
+The submit page's field ids match the issue form's ids (`.github/ISSUE_TEMPLATE/event-submission.yml`), which is how GitHub fills the form in from the link. If you add, rename or remove a field or dropdown option in one, change the other to match.
 
 ### Event Eligibility
 

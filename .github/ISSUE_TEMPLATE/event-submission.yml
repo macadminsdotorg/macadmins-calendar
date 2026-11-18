@@ -11,6 +11,8 @@ body:
         A Mac Admins Foundation volunteer will review it. Good fits are **broadly relevant to the Mac admin community, offer high-quality technical or professional content, are live (in person or virtual), and welcome all attendees.** Sales pitches, invite-only events, and pre-recorded events aren't a fit.
 
         **Want to see how it will look first?** Fill in the form at [macadmins.org/calendar/submit](https://macadmins.org/calendar/submit/) instead. It shows a preview of your event and brings your answers back here.
+
+        Once you submit, a bot replies with a preview of the calendar entry and any problems to fix. Edit the issue to change anything, and the preview updates.
   - type: input
     id: name
     attributes:

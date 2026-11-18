@@ -36,7 +36,9 @@ const events = [
         website: "{{ .website }}",
         type: "{{ .type }}",
         videos: "{{ .videos | default "" }}",
-        archive: "{{ .archive | default "" }}"
+        archive: "{{ .archive | default "" }}",
+        organizer: "{{ .organizer | default "" }}",
+        language: "{{ with .language }}{{ index site.Data.languages.languages . | default . }}{{ end }}"
     },
     {{ end }}
 ];
@@ -202,12 +204,19 @@ function showEventDetails(event) {
     const titleContent = event.full_name && event.full_name !== event.name
         ? `${fullName}<br><small>(${name})</small>`
         : name;
+    // Same rule as the event card: hide an organizer that repeats the title.
+    const showOrganizer = event.organizer
+        && event.organizer !== event.name
+        && event.organizer !== event.full_name;
+    const typeLabel = event.type.charAt(0).toUpperCase() + event.type.slice(1);
 
     content.innerHTML = `
         <h4><a href="${website}" target="_blank" rel="noopener noreferrer">${titleContent}</a></h4>
         <p><strong><span aria-hidden="true">📅</span> Date:</strong> ${escapeHtml(dateStr)}</p>
         <p><strong><span aria-hidden="true">📍</span> Location:</strong> ${escapeHtml(event.location)}</p>
-        <p><strong><span aria-hidden="true">🏷️</span> Type:</strong> ${escapeHtml(event.type)}</p>
+        ${showOrganizer ? `<p><strong><span aria-hidden="true">👥</span> Organizer:</strong> ${escapeHtml(event.organizer)}</p>` : ''}
+        <p><strong><span aria-hidden="true">🏷️</span> Type:</strong> ${escapeHtml(typeLabel)}</p>
+        ${event.language ? `<p><strong><span aria-hidden="true">🌐</span> Language:</strong> ${escapeHtml(event.language)}</p>` : ''}
         <div class="event-actions">
             <a href="${website}" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><span aria-hidden="true">🌐</span> Website</a>
             ${videos ? `<a href="${videos}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><span aria-hidden="true">📹</span> Videos</a>` : ''}

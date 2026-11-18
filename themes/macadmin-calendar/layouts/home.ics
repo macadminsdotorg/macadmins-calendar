@@ -15,7 +15,7 @@
   {{- $location := partial "ics-escape" .location -}}
   {{- $descText := printf "%s — %s" .name .type -}}
   {{- $event := . -}}
-  {{- with .organizer }}{{ if ne . $event.name }}{{ $descText = printf "%s — Organized by %s" $descText . }}{{ end }}{{ end -}}
+  {{- with .organizer }}{{ if and (ne . $event.name) (ne . ($event.full_name | default "")) }}{{ $descText = printf "%s — Organized by %s" $descText . }}{{ end }}{{ end -}}
   {{- $description := partial "ics-escape" $descText -}}
   {{- printf "BEGIN:VEVENT\r\n" -}}
   {{- printf "UID:%s\r\n" $uid -}}

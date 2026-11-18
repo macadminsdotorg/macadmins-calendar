@@ -13,7 +13,7 @@
         <h3>
             <a href="{{ .website }}" target="_blank" rel="noopener noreferrer">
                 {{ if .full_name }}{{ .full_name }}{{ else }}{{ .name }}{{ end }}
-                {{ if .full_name }}<br><small>({{ .name }})</small>{{ end }}
+                {{ if and .full_name (ne .full_name .name) }}<br><small>({{ .name }})</small>{{ end }}
             </a>
         </h3>
         <div class="event-meta">

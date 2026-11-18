@@ -9,80 +9,79 @@ body:
         Thanks for suggesting an event for the [Community Calendar](https://macadmins.org/calendar/)!
 
         A Mac Admins Foundation volunteer will review it. Good fits are **broadly relevant to the Mac admin community, offer high-quality technical or professional content, are live (in person or virtual), and welcome all attendees.** Sales pitches, invite-only events, and pre-recorded events aren't a fit.
+
+        **How your answers appear on the calendar**
+
+        ```
+        Event name                                  <- the title, everywhere (also the only text on the month grid)
+        November 24, 2026 | Location | Organizing group | MEETUP
+        [Website]  [Recordings]
+        ```
+
+        Once you submit, a bot replies with a preview of the entry. Edit the issue to fix anything, and the preview updates.
   - type: input
     id: name
     attributes:
       label: Event name
-      placeholder: e.g. MacSysAdmin
-    validations:
-      required: true
-  - type: input
-    id: full_name
-    attributes:
-      label: Full name (optional)
-      description: A longer, more descriptive name if the short name isn't obvious.
-      placeholder: e.g. Mac & iOS System Administrators Conference
-  - type: input
-    id: website
-    attributes:
-      label: Event website
-      placeholder: https://
-    validations:
-      required: true
-  - type: input
-    id: start_date
-    attributes:
-      label: Start date
-      description: Format YYYY-MM-DD.
-      placeholder: "2026-09-29"
-    validations:
-      required: true
-  - type: input
-    id: end_date
-    attributes:
-      label: End date
-      description: Format YYYY-MM-DD. Use the same date as the start for a one-day event.
-      placeholder: "2026-10-02"
-    validations:
-      required: true
-  - type: input
-    id: location
-    attributes:
-      label: Location
-      description: City, State/Province, Country — or "Online" for a virtual event.
-      placeholder: "Göteborg, Sweden"
+      description: |
+        The title shown everywhere on the calendar. Include your group's name so it makes sense on its own, and leave the date out (we show it separately).
+      placeholder: e.g. Greater Philadelphia Mac Admins Meetup
     validations:
       required: true
   - type: input
     id: organizer
     attributes:
       label: Organizing group (optional)
-      description: The user group, company, or organization that runs the event. Leave blank if it's the same as the event name.
-      placeholder: e.g. Hoosier Mac Admins
+      description: The user group, company, or organization that runs the event. Leave blank if the event name already says it.
+      placeholder: e.g. Greater Philadelphia Mac Admins
   - type: dropdown
     id: type
     attributes:
       label: Event type
+      description: Pick Meetup for user group meetings.
       options:
-        - Conference
         - Meetup
-        - User group
+        - Conference
         - Workshop
         - Webinar
-        - Other
+    validations:
+      required: true
+  - type: input
+    id: start_date
+    attributes:
+      label: Date
+      description: Format YYYY-MM-DD. For a multi-day event, this is the first day.
+      placeholder: "2026-11-24"
+    validations:
+      required: true
+  - type: input
+    id: end_date
+    attributes:
+      label: End date (multi-day events only)
+      description: Format YYYY-MM-DD. Leave blank for a one-day event.
+      placeholder: "2026-11-26"
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: |
+        City, then state or province if your country uses them, then country. No street addresses or venue names. Write "Online" for a virtual event.
+        Examples: `Philadelphia, PA, USA` · `Brighton, UK` · `Tokyo, Japan` · `Online`
+      placeholder: "Philadelphia, PA, USA"
+    validations:
+      required: true
+  - type: input
+    id: website
+    attributes:
+      label: Event website or sign-up page
+      placeholder: https://
     validations:
       required: true
   - type: input
     id: videos
     attributes:
-      label: Session videos (optional)
-      description: Link to a channel or playlist if talks are published.
-      placeholder: https://
-  - type: input
-    id: archive
-    attributes:
-      label: Documentation archive (optional)
-      description: Link to slides, notes, or session documentation from past editions.
+      label: Recordings (optional)
+      description: Link to a channel or playlist where past talks are published.
       placeholder: https://
   - type: dropdown
     id: language
@@ -113,7 +112,7 @@ body:
     id: notes
     attributes:
       label: Anything else? (optional)
-      description: Extra context, or how you're connected to the event.
+      description: Extra context for the reviewer, or how you're connected to the event. This isn't shown on the calendar.
   - type: checkboxes
     id: eligibility
     attributes:

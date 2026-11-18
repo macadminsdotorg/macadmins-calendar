@@ -298,7 +298,7 @@ def build_preview(body):
             lines += ["> ", f"> _Language: {event['language']}_"]
         if links:
             lines += ["> ", "> " + "  ".join(links)]
-        lines += ["", f"On the month grid this shows as **{event['name']}**.", ""]
+        lines.append("")
 
     if errors:
         lines += ["**This needs fixing before it can be approved:**", ""]

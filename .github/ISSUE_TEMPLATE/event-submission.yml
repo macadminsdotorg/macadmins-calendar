@@ -6,6 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
+        > [!NOTE]
+        > **The "Add a title" box above is only the name of this GitHub issue.** Our volunteers use it to keep track of your submission. It isn't shown on macadmins.org or the calendar. Anything is fine there, such as `[Event] Philadelphia Mac Admins Meetup`. The name visitors see is the **Event name** field below.
+
         Thanks for suggesting an event for the [Community Calendar](https://macadmins.org/calendar/)!
 
         A Mac Admins Foundation volunteer will review it. Good fits are **broadly relevant to the Mac admin community, offer high-quality technical or professional content, are live (in person or virtual), and welcome all attendees.** Sales pitches, invite-only events, and pre-recorded events aren't a fit.

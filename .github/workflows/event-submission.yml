@@ -29,11 +29,30 @@ jobs:
       - name: Validate
         id: validate
         run: |
-          if python scripts/validate_events.py; then
+          if python scripts/validate_events.py 2> "$RUNNER_TEMP/validate.txt"; then
             echo "result=passed" >> "$GITHUB_OUTPUT"
           else
             echo "result=failed" >> "$GITHUB_OUTPUT"
           fi
+      - name: Send back a submission that fails validation
+        if: steps.validate.outputs.result == 'failed'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          {
+            echo "This submission didn't pass validation, so no pull request was opened:"
+            echo
+            echo '```'
+            grep -v '^$' "$RUNNER_TEMP/validate.txt"
+            echo '```'
+            echo
+            echo "Edit the issue to fix it (the preview comment will update), then add the \`approved\` label again."
+          } > "$RUNNER_TEMP/comment.md"
+          gh issue comment "$ISSUE" --repo "$REPO" --body-file "$RUNNER_TEMP/comment.md"
+          gh issue edit "$ISSUE" --repo "$REPO" --remove-label approved
+          exit 1
       - name: Create pull request
         id: pr
         uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
@@ -44,10 +63,20 @@ jobs:
           body: |
             Adds **${{ steps.convert.outputs.name }}** to the calendar, submitted in #${{ github.event.issue.number }}.
 
-            ${{ steps.validate.outputs.result == 'passed' && ':white_check_mark: `validate_events.py` passed.' || ':warning: `validate_events.py` failed — check the entry (event type?) before merging.' }}
+            `validate_events.py` passed.
 
             Closes #${{ github.event.issue.number }}
           delete-branch: true
+      - name: Report a submission that couldn't be converted
+        if: failure() && steps.convert.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$REPO" --body "This submission couldn't be converted (a required field is missing, or the event is already on the calendar). See the preview comment above, or the run log: $RUN_URL. Fix the issue, then add the \`approved\` label again."
+          gh issue edit "$ISSUE" --repo "$REPO" --remove-label approved
       - name: Close issue
         env:
           GH_TOKEN: ${{ github.token }}

@@ -204,11 +204,144 @@ def write_output(name, value):
             f.write(f"{name}={value}\n")
 
 
+PREVIEW_MARKER = "<!-- event-submission-preview -->"
+
+MONTHS = (
+    "january", "february", "march", "april", "may", "june", "july",
+    "august", "september", "october", "november", "december",
+)
+
+
+def style_warnings(event):
+    """Advisory notes for things that pass validation but read badly on the
+    site. They never block approval."""
+    notes = []
+    name = event.get("name", "")
+    lowered = name.lower()
+    if any(re.search(rf"\b{m}\b", lowered) for m in MONTHS) or re.search(r"\b20\d\d\b", name):
+        notes.append(
+            "The event name contains a month or year. The calendar already shows "
+            "the date, so consider removing it."
+        )
+    location = event.get("location", "")
+    if location and location.lower() != "online":
+        if re.match(r"^\d", location):
+            notes.append(
+                "The location looks like a street address. Use the city, region "
+                "and country instead, e.g. `Las Vegas, NV, USA`."
+            )
+        elif "," not in location:
+            notes.append(
+                "The location has no country. Use `City, Region, Country` "
+                "or `Online`."
+            )
+    if event.get("type") == "meetup" and not event.get("organizer"):
+        notes.append(
+            "No organizing group is set. If the event name doesn't already say "
+            "who runs it, add one."
+        )
+    return notes
+
+
+def format_dates(start, end):
+    from datetime import date
+
+    try:
+        s, e = date.fromisoformat(start), date.fromisoformat(end)
+    except ValueError:
+        return f"{start} – {end}" if end != start else start
+    if s == e:
+        return f"{s:%B} {s.day}, {s.year}"
+    return f"{s:%B} {s.day} – {e:%B} {e.day}, {e.year}"
+
+
+def build_preview(body):
+    """Return (markdown, ok) describing how the submission would land."""
+    import yaml
+    from validate_events import load_languages, validate
+
+    event = build_event(parse_issue_body(body))
+    errors = []
+    for field in ("name", "start_date"):
+        if field not in event:
+            errors.append(f"Could not read the {field.replace('_', ' ')} from the issue.")
+
+    entry = format_entry(event) if event else ""
+    if not errors:
+        header, blocks = split_blocks(EVENTS_PATH.read_text())
+        if is_duplicate(blocks, event):
+            errors.append("An event with this name and start date is already on the calendar.")
+        else:
+            merged = insert_sorted(header, blocks, entry, event["start_date"])
+            all_events = yaml.safe_load(merged)["events"]
+            mine = [e for e in all_events if e.get("name") == event["name"]
+                    and str(e.get("start_date")) == event["start_date"]]
+            errors.extend(
+                err.split(": ", 1)[-1] for err in validate(mine, load_languages())
+            )
+
+    lines = [PREVIEW_MARKER, "### Calendar preview", ""]
+    if event.get("name"):
+        title = event.get("full_name") or event["name"]
+        meta = [format_dates(event.get("start_date", "?"), event.get("end_date", "?")),
+                event.get("location", "(no location)")]
+        if event.get("organizer"):
+            meta.append(event["organizer"])
+        meta.append(event.get("type", "(no type)").upper())
+        links = [f"[Website]({event['website']})"] if event.get("website") else []
+        if event.get("videos"):
+            links.append(f"[Videos]({event['videos']})")
+        if event.get("archive"):
+            links.append(f"[Archive]({event['archive']})")
+        lines += [f"> **{title}**", "> ", "> " + " · ".join(meta)]
+        if event.get("language"):
+            lines += ["> ", f"> _Language: {event['language']}_"]
+        if links:
+            lines += ["> ", "> " + "  ".join(links)]
+        lines += ["", f"On the month grid this shows as **{event['name']}**.", ""]
+
+    if errors:
+        lines += ["**This needs fixing before it can be approved:**", ""]
+        lines += [f"- {e}" for e in errors]
+    else:
+        lines.append("Validation passed.")
+    notes = style_warnings(event)
+    if notes:
+        lines += ["", "**Suggestions** (optional):", ""]
+        lines += [f"- {n}" for n in notes]
+    lines += [
+        "",
+        "Edit the issue to change anything; this comment updates automatically.",
+        "",
+        "<details><summary>events.yaml entry</summary>",
+        "",
+        "```yaml",
+        entry,
+        "```",
+        "",
+        "</details>",
+    ]
+    return "\n".join(lines) + "\n", not errors
+
+
 def main():
     body = os.environ.get("ISSUE_BODY")
     if not body:
         print("ISSUE_BODY environment variable is empty", file=sys.stderr)
         return 1
+
+    # --preview writes a Markdown summary for the issue comment and leaves
+    # events.yaml untouched. It exits 0 even when the submission has
+    # problems; those are reported in the summary.
+    if "--preview" in sys.argv[1:]:
+        markdown, ok = build_preview(body)
+        out = os.environ.get("PREVIEW_PATH")
+        if out:
+            Path(out).write_text(markdown)
+        else:
+            print(markdown)
+        write_output("valid", "true" if ok else "false")
+        return 0
 
     event = build_event(parse_issue_body(body))
     missing = [f for f in ("name", "start_date") if f not in event]

@@ -1,0 +1,48 @@
+name: Preview event submission
+
+# Replies to an event-submission issue with how the event will look on the
+# calendar and whether it passes validation, and keeps that one comment up
+# to date as the submitter edits the issue. Nothing is written to the repo.
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+concurrency:
+  group: event-preview-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: contains(github.event.issue.labels.*.name, 'event-submission') && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install pyyaml
+      - name: Build preview
+        env:
+          # Untrusted input: only ever passed via environment, never
+          # interpolated into run steps.
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          PREVIEW_PATH: ${{ runner.temp }}/preview.md
+        run: python scripts/issue_to_event.py --preview
+      - name: Post or update the preview comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          PREVIEW_PATH: ${{ runner.temp }}/preview.md
+        run: |
+          comment_id=$(gh api --paginate "repos/$REPO/issues/$ISSUE/comments" \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- event-submission-preview -->"))) | .id' \
+            | head -n1)
+          if [ -n "$comment_id" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$comment_id" -F body=@"$PREVIEW_PATH" > /dev/null
+          else
+            gh issue comment "$ISSUE" --repo "$REPO" --body-file "$PREVIEW_PATH"
+          fi

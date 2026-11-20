@@ -364,6 +364,14 @@ events:
     website: "https://luma.com/eq24ilqt"
     type: "meetup"
 
+  - name: "Dallas Apple Admins Meetup"
+    start_date: "2026-12-10"
+    end_date: "2026-12-10"
+    location: "Plano, TX"
+    organizer: "Dallas Apple Admins"
+    website: "https://dallasappleadmins.org/2026/11/19/December2026Meetup.html"
+    type: "meetup"
+
   - name: "Mac Admins Europe"
     start_date: "2027-04-15"
     end_date: "2027-04-15"

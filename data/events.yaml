@@ -372,6 +372,14 @@ events:
     website: "https://dallasappleadmins.org/2026/11/19/December2026Meetup.html"
     type: "meetup"
 
+  - name: "Music City Mac Admins Holiday Social 🎄"
+    start_date: "2026-12-16"
+    end_date: "2026-12-16"
+    location: "Nashville, TN, USA"
+    organizer: "Music City Mac Admins User Group"
+    website: "https://luma.com/m7gtvsvy"
+    type: "meetup"
+
   - name: "Mac Admins Europe"
     start_date: "2027-04-15"
     end_date: "2027-04-15"

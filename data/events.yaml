@@ -380,6 +380,14 @@ events:
     website: "https://luma.com/m7gtvsvy"
     type: "meetup"
 
+  - name: "Life Goes by Slow (a Holiday Social Meetup)"
+    start_date: "2026-12-19"
+    end_date: "2026-12-19"
+    location: "Tacoma, WA,"
+    organizer: "Apple Admins of Seattle and the Great Northwest"
+    website: "https://www.icloud.com/invites/099GGYxRDv9wqEM7fy0tEULXg"
+    type: "meetup"
+
   - name: "Mac Admins Europe"
     start_date: "2027-04-15"
     end_date: "2027-04-15"

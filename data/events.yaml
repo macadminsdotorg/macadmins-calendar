@@ -252,6 +252,14 @@ events:
     website: "https://forms.cloud.microsoft/r/sy6s969E6g?origin=lprLink"
     type: "meetup"
 
+  - name: "Berlin MacAdmins User Group Meetup"
+    start_date: "2026-10-09"
+    end_date: "2026-10-09"
+    location: "Berlin, Deutschland/Germany"
+    organizer: "Berlin MacAdmins User Group"
+    website: "https://macadmins-meetup.org/event/10/december-meetup?aff=QKLZ1DMS"
+    type: "meetup"
+
   - name: "Atlanta Mac Admins - October Social"
     full_name: "Atlanta Mac Admins"
     start_date: "2026-10-14"
